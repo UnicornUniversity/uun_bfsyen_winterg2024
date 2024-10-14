@@ -1,8 +1,8 @@
-function Header({ setToDoListList }) {
+function Header({ setOverviewList }) {
   return (
     <button
       onClick={() =>
-        setToDoListList((currentValue) => {
+        setOverviewList((currentValue) => {
           currentValue.push({ id: Math.random(), name: Math.random() });
           return currentValue.slice();
         })

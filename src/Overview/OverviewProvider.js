@@ -1,8 +1,8 @@
 import { useState } from "react";
-import ToDoListOverview from "./ToDoListOverview";
+import Overview from "./Overview";
 
-function ToDoListProvider() {
-  const [toDoListList, setToDoListList] = useState([
+function OverviewProvider() {
+  const [overviewList, setOverviewList] = useState([
     {
       id: "tdl01",
       name: "First ToDo List",
@@ -22,11 +22,8 @@ function ToDoListProvider() {
   ]);
 
   return (
-    <ToDoListOverview
-      toDoListList={toDoListList}
-      setToDoListList={setToDoListList}
-    />
+    <Overview overviewList={overviewList} setOverviewList={setOverviewList} />
   );
 }
 
-export default ToDoListProvider;
+export default OverviewProvider;

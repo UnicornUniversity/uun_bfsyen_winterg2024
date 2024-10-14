@@ -1,10 +1,10 @@
 import "./App.css";
-import ToDoListProvider from "./ToDoListOverview/ToDoListProvider";
+import OverviewProvider from "./Overview/OverviewProvider";
 
 function App() {
   return (
     <div className="App">
-      <ToDoListProvider />
+      <OverviewProvider />
     </div>
   );
 }

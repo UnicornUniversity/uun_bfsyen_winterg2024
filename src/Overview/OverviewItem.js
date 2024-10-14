@@ -1,10 +1,10 @@
-function ToDoListOverviewItem({ itemData, setToDoListList }) {
+function OverviewItem({ itemData, setOverviewList }) {
   return (
     <div>
       <pre>{JSON.stringify(itemData, null, 2)}</pre>
       <button
         onClick={() => {
-          setToDoListList((currentData) => {
+          setOverviewList((currentData) => {
             const itemIndex = currentData.findIndex(
               (item) => item.id === itemData.id
             );
@@ -21,4 +21,4 @@ function ToDoListOverviewItem({ itemData, setToDoListList }) {
   );
 }
 
-export default ToDoListOverviewItem;
+export default OverviewItem;
