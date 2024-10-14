@@ -1,6 +1,7 @@
 import "./App.css";
 import OverviewProvider from "./Overview/OverviewProvider";
 import { UserProvider } from "./Users/UserProvider.js";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (

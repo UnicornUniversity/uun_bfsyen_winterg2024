@@ -1,12 +1,14 @@
 import { useContext } from "react";
 import { UserContext } from "../Users/UserProvider";
+import Button from "react-bootstrap/Button";
 
 function Header({ setOverviewList, showArchived, setShowArchived }) {
   const { userList, loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   return (
     <>
-      <button
+      <Button
+        variant="success"
         onClick={() =>
           setOverviewList((currentValue) => {
             currentValue.push({ id: Math.random(), name: Math.random() });
@@ -15,7 +17,7 @@ function Header({ setOverviewList, showArchived, setShowArchived }) {
         }
       >
         create
-      </button>{" "}
+      </Button>{" "}
       <button onClick={() => setShowArchived((currentValue) => !currentValue)}>
         {showArchived ? "with archived" : "active only"}
       </button>
