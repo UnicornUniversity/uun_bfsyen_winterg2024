@@ -3,7 +3,11 @@ import OverviewItem from "./OverviewItem";
 function Content({ overviewList, setOverviewList }) {
   return overviewList.map((itemData) => {
     return (
-      <OverviewItem itemData={itemData} setOverviewList={setOverviewList} />
+      <OverviewItem
+        key={itemData.id}
+        itemData={itemData}
+        setOverviewList={setOverviewList}
+      />
     );
   });
 }
