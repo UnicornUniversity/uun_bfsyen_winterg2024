@@ -1,14 +1,12 @@
-import { useContext } from "react";
-import { UserContext } from "../Users/UserProvider";
-
-function Member({ memberId, ownerId, owner }) {
-  const { userMap, loggedInUser } = useContext(UserContext);
-
+function Member({ data, handlerMap, isOwner, showRemoveButton }) {
   return (
     <div>
-      {userMap[memberId].name} {owner ? owner.toString() : null}{" "}
-      {!owner && (ownerId === loggedInUser || memberId === loggedInUser) ? (
-        <button>remove</button>
+      {data.name}
+      {isOwner ? " true " : " "}
+      {showRemoveButton ? (
+        <button onClick={() => handlerMap.removeMember({ memberId: data.id })}>
+          remove
+        </button>
       ) : null}
     </div>
   );

@@ -1,32 +1,17 @@
 import { useContext } from "react";
-import { UserContext } from "../Users/UserProvider";
-import Button from "react-bootstrap/Button";
+import { UserContext } from "../Users/UserProvider.js";
 
-function Header({ setOverviewList, showArchived, setShowArchived }) {
+function Header() {
   const { userList, loggedInUser, setLoggedInUser } = useContext(UserContext);
-
   return (
-    <>
-      <Button
-        variant="success"
-        onClick={() =>
-          setOverviewList((currentValue) => {
-            currentValue.push({ id: Math.random(), name: Math.random() });
-            return currentValue.slice();
-          })
-        }
-      >
-        create
-      </Button>{" "}
-      <button onClick={() => setShowArchived((currentValue) => !currentValue)}>
-        {showArchived ? "with archived" : "active only"}
-      </button>
+    <div>
+      AppName
       {userList.map((user) => (
-        <button onClick={() => setLoggedInUser(user.id)}>
-          {user.name} {(loggedInUser === user.id).toString()}
+        <button key={user.id} onClick={() => setLoggedInUser(user.id)}>
+          {user.name} {(user.id === loggedInUser).toString()}
         </button>
       ))}
-    </>
+    </div>
   );
 }
 

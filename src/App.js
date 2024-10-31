@@ -1,7 +1,8 @@
-import "./App.css";
-import Detail from "./Detail/Detail.js";
-import { UserProvider } from "./Users/UserProvider.js";
 import "bootstrap/dist/css/bootstrap.min.css";
+
+import "./App.css";
+import Detail from "./Detail/Detail";
+import UserProvider from "./Users/UserProvider";
 
 function App() {
   return (

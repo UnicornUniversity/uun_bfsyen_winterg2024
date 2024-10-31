@@ -1,40 +1,31 @@
-import { useState } from "react";
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
-const UserContext = createContext();
+export const UserContext = createContext();
 
 function UserProvider({ children }) {
   const [loggedInUser, setLoggedInUser] = useState("u1");
   const userMap = {
     u1: {
-      name: "aragorn",
       id: "u1",
+      name: "křemílek",
     },
     u2: {
-      name: "gandalf",
       id: "u2",
+      name: "vochomůrka",
     },
     u3: {
-      name: "frodo",
       id: "u3",
+      name: "rampušák",
+    },
+    u4: {
+      id: "u4",
+      name: "rákosníček",
     },
   };
+
   const value = {
     userMap,
-    userList: [
-      {
-        name: "aragorn",
-        id: "u1",
-      },
-      {
-        name: "gandalf",
-        id: "u2",
-      },
-      {
-        name: "frodo",
-        id: "u3",
-      },
-    ],
+    userList: Object.keys(userMap).map((userId) => userMap[userId]),
     loggedInUser,
     setLoggedInUser,
   };
@@ -42,5 +33,4 @@ function UserProvider({ children }) {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
-export { UserContext, UserProvider };
-export default UserContext;
+export default UserProvider;

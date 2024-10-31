@@ -1,22 +1,7 @@
-import Header from "./Header";
-import Content from "./Content";
+import OverviewProvider from "./OverviewProvider";
 
-function Overview({
-  overviewList,
-  setOverviewList,
-  showArchived,
-  setShowArchived,
-}) {
-  return (
-    <>
-      <Header
-        setOverviewList={setOverviewList}
-        showArchived={showArchived}
-        setShowArchived={setShowArchived}
-      />
-      <Content overviewList={overviewList} setOverviewList={setOverviewList} />
-    </>
-  );
+function Overview() {
+  return <OverviewProvider />;
 }
 
 export default Overview;

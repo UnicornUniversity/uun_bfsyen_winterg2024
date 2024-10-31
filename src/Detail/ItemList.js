@@ -1,22 +1,22 @@
 import { useContext } from "react";
-import { DetailContext } from "./Provider";
+import { DetailContext } from "./DetailProvider";
 import Item from "./Item";
 
 function ItemList() {
-  const { data, handlerMap } = useContext(DetailContext);
+  const { data, handlerMap, showResolved, toggleShowResolved } =
+    useContext(DetailContext);
 
   return (
-    <div style={{ padding: "8px", border: "solid 1px grey" }}>
-      Item List <button onClick={handlerMap.addToDoItem}>add item</button>
-      {data.itemList.map((item) => (
-        <Item
-          key={item.id}
-          item={item}
-          updateToDoItemName={handlerMap.updateToDoItemName}
-          updateToDoItemState={handlerMap.updateToDoItemState}
-          removeToDoItem={handlerMap.removeToDoItem}
-        />
-      ))}
+    <div style={{ border: "1px solid grey", margin: "8px", padding: "8px" }}>
+      ItemList <button onClick={() => handlerMap.addItem()}>add item</button>
+      <button onClick={() => toggleShowResolved()}>
+        {showResolved ? "not resolved only" : "all items"}
+      </button>
+      <div>
+        {data.itemList.map((item) => (
+          <Item key={item.id} data={item} handlerMap={handlerMap} />
+        ))}
+      </div>
     </div>
   );
 }

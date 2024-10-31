@@ -1,48 +1,21 @@
 import { useState } from "react";
-import Form from "react-bootstrap/Form";
 
-function Item({
-  item,
-  updateToDoItemName,
-  updateToDoItemState,
-  removeToDoItem,
-}) {
-  const [itemName, setItemName] = useState(item.name);
+function Item({ data, handlerMap }) {
+  const [value, setValue] = useState(data.name);
 
   return (
     <div>
-      {item.resolved.toString()}{" "}
-      <Form.Control
+      <input
         type="text"
-        required
-        value={itemName}
-        onChange={(e) => {
-          setItemName(e.target.value);
-        }}
-        onBlur={() => {
-          updateToDoItemName({
-            id: item.id,
-            name: itemName,
-          });
-        }}
-      />
-      <button
-        onClick={() =>
-          updateToDoItemState({
-            id: item.id,
-          })
-        }
-      >
-        resolve
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={() => handlerMap.updateItemName({ id: data.id, name: value })}
+      />{" "}
+      <button onClick={() => handlerMap.toggleResolveItem({ id: data.id })}>
+        {data.resolved ? "unresolve" : "resolve"}
       </button>
-      <button
-        onClick={() =>
-          removeToDoItem({
-            id: item.id,
-          })
-        }
-      >
-        remove
+      <button onClick={() => handlerMap.deleteItem({ id: data.id })}>
+        delete
       </button>
     </div>
   );

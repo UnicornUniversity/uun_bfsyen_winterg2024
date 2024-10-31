@@ -1,31 +1,27 @@
 import { useContext, useState } from "react";
+import { DetailContext } from "./DetailProvider";
 import { UserContext } from "../Users/UserProvider";
-import { DetailContext } from "./Provider";
-import UpdateNameForm from "./UpdateNameForm.js";
+import UpdateNameForm from "./UpdateNameForm";
 
 function Toolbar() {
   const [show, setShow] = useState(false);
+  const { data, handlerMap } = useContext(DetailContext);
   const { loggedInUser } = useContext(UserContext);
-  const { data } = useContext(DetailContext);
-
-  function handleCloseUpdateModal() {
-    setShow(false);
-  }
-
-  function hadleOpenUpdateModal() {
-    setShow(true);
-  }
 
   return (
-    <div style={{ padding: "8px", border: "solid 1px grey" }}>
-      <UpdateNameForm show={show} onHide={handleCloseUpdateModal} />
+    <div style={{ border: "1px solid grey", margin: "8px", padding: "8px" }}>
+      <UpdateNameForm
+        show={show}
+        handleClose={() => setShow(false)}
+        data={data}
+        handlerMap={handlerMap}
+      />
       {data.name}{" "}
-      <button
-        disabled={loggedInUser !== data.owner}
-        onClick={hadleOpenUpdateModal}
-      >
-        update
-      </button>
+      {loggedInUser === data.owner ? (
+        <button onClick={() => setShow(true)}>update name</button>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
