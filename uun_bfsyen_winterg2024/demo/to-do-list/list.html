@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UunBfsyenWinterg2024.ToDoList.List Demo</title>
+
+    <script src="https://cdn.plus4u.net/uu-uu5loaderg01/1.0.0/uu5loaderg01.min.js" crossorigin></script>
+
+    <script>
+      var uu5DemoDependencies = {
+        uu_plus4u5g02: "1.x",
+        "uu_plus4u5g02-app": "1.x",
+      };
+    </script>
+
+    <!-- Use only one of these - preferred is uuCloudg02. Usage of cdn.plus4u.net (uuCloudg01) will be deprecated. -->
+    <!-- <script
+      src="https://cdng02.plus4u.net/b686718ad49d3ec4d88936576cd830c2/uun-bfsyen-winterg2024/0.x/assets/example-config.js"
+      crossorigin
+    ></script> -->
+    <script src="https://cdn.plus4u.net/uun-bfsyen-winterg2024/0.0.0/assets/example-config.js" crossorigin></script>
+  </head>
+  <body>
+    <main id="uu5"></main>
+
+    <script type="text/babel">
+      import { Utils, createComponent, useState } from "uu5g05";
+      import Uu5Forms from "uu5g05-forms";
+      import { Config } from "uu5g05-dev";
+      import Plus4U5 from "uu_plus4u5g02";
+      import Plus4U5App from "uu_plus4u5g02-app";
+      import UunBfsyenWinterg2024 from "uun_bfsyen_winterg2024";
+
+      // TODO UunBfsyenWinterg2024.ToDoList.List - update config.
+      const BASE_URI = "";
+
+      const Settings = createComponent({
+        render(props) {
+          const { value, onChange } = props;
+          return (
+            <Uu5Forms.Form>
+              <Uu5Forms.FormText
+                name="baseUri"
+                label="Base URI"
+                initialValue={value.baseUri}
+                onBlur={(e) => onChange(new Utils.Event({ value: { ...value, baseUri: e.data.value } }))}
+              />
+            </Uu5Forms.Form>
+          );
+        },
+      });
+
+      const Page = createComponent({
+        render() {
+          const [settings, setSettings] = useState({
+            baseUri: BASE_URI,
+          });
+
+          return (
+            <Plus4U5.SpaProvider baseUri={settings.baseUri} initialLanguageList={["en", "cs"]} skipAppWorkspaceProvider>
+              <Plus4U5App.Spa>
+                <main className={Config.Css.css({ padding: 24 })}>
+                  <Settings value={settings} onChange={(e) => setSettings(e.data.value)} />
+
+                  <h4>Default props</h4>
+                  <UunBfsyenWinterg2024.ToDoList.List />
+
+                  <h4>Nesting level spot</h4>
+                  <UunBfsyenWinterg2024.ToDoList.List nestingLevel="spot" />
+
+                  <h4>Nesting level inline</h4>
+                  <UunBfsyenWinterg2024.ToDoList.List nestingLevel="inline" />
+                </main>
+              </Plus4U5App.Spa>
+            </Plus4U5.SpaProvider>
+          );
+        },
+      });
+
+      Utils.Dom.render(<Page />, document.getElementById("uu5"));
+    </script>
+  </body>
+</html>
