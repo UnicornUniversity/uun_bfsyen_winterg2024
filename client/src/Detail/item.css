@@ -1,0 +1,11 @@
+.item {
+  border: red 1px solid;
+  border-radius: 16px;
+  margin: 8px;
+  padding: 8px;
+  background: grey;
+}
+
+.item-resolved {
+  background: green;
+}
