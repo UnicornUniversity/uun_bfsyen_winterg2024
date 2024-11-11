@@ -1,12 +1,10 @@
-import { useMemo, useState, useContext } from "react";
+import { createContext, useMemo, useState, useContext } from "react";
 
 import { UserContext } from "../Users/UserProvider.js";
 
-import Header from "./Header.js";
-import ToDoListOverviewList from "./OverviewList.js";
-import Toolbar from "./Toolbar.js";
+export const OverviewContext = createContext();
 
-function OverviewProvider() {
+function OverviewProvider({ children }) {
   const [showArchived, setShowArchived] = useState(false);
   const { loggedInUser } = useContext(UserContext);
 
@@ -41,11 +39,11 @@ function OverviewProvider() {
     },
   ]);
 
-  function handleCreate() {
+  function handleCreate(dtoIn) {
     setToDoListOverviewList((current) => {
       current.push({
         id: Math.random(),
-        name: "Nový úkol",
+        name: dtoIn.name,
         state: "active",
         owner: loggedInUser,
         memberList: [],
@@ -73,34 +71,27 @@ function OverviewProvider() {
   const filteredToDoListList = useMemo(() => {
     if (showArchived) {
       return toDoListOverviewList.filter(
-        (item) =>
-          item.owner === loggedInUser || item.memberList?.includes(loggedInUser)
+        (item) => item.owner === loggedInUser || item.memberList?.includes(loggedInUser),
       );
     } else {
       return toDoListOverviewList.filter(
-        (item) =>
-          item.state === "active" &&
-          (item.owner === loggedInUser ||
-            item.memberList?.includes(loggedInUser))
+        (item) => item.state === "active" && (item.owner === loggedInUser || item.memberList?.includes(loggedInUser)),
       );
     }
   }, [showArchived, toDoListOverviewList, loggedInUser]);
 
-  return (
-    <>
-      <Header />
-      <Toolbar
-        handleCreate={handleCreate}
-        showArchived={showArchived}
-        setShowArchived={setShowArchived}
-      />
-      <ToDoListOverviewList
-        toDoListOverviewList={filteredToDoListList}
-        handleArchive={handleArchive}
-        handleDelete={handleDelete}
-      />
-    </>
-  );
+  const value = {
+    data: filteredToDoListList,
+    handlerMap: {
+      handleCreate,
+      handleArchive,
+      handleDelete,
+    },
+    showArchived,
+    setShowArchived,
+  };
+
+  return <OverviewContext.Provider value={value}>{children}</OverviewContext.Provider>;
 }
 
 export default OverviewProvider;

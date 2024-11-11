@@ -3,6 +3,7 @@ import { UserContext } from "../Users/UserProvider.js";
 
 function Header() {
   const { userList, loggedInUser, setLoggedInUser } = useContext(UserContext);
+
   return (
     <div>
       AppName

@@ -1,12 +1,11 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
-import "./item.css";
 
 function Item({ data, handlerMap }) {
   const [value, setValue] = useState(data.name);
 
   return (
-    <div className={`item ${data.resolved ? "item-resolved" : ""}`}>
+    <div>
       <input
         type="text"
         value={value}
@@ -16,9 +15,7 @@ function Item({ data, handlerMap }) {
       <Button onClick={() => handlerMap.toggleResolveItem({ id: data.id })}>
         {data.resolved ? "unresolve" : "resolve"}
       </Button>
-      <button onClick={() => handlerMap.deleteItem({ id: data.id })}>
-        delete
-      </button>
+      <button onClick={() => handlerMap.deleteItem({ id: data.id })}>delete</button>
     </div>
   );
 }

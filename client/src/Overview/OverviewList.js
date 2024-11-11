@@ -1,14 +1,19 @@
+import { useContext } from "react";
+import { OverviewContext } from "./OverviewProvider.js";
+
 import OverviewItem from "./OverviewItem";
 
-function OverviewList({ OverviewList, handleArchive, handleDelete }) {
+function OverviewList() {
+  const { data, handlerMap } = useContext(OverviewContext);
+
   return (
     <div>
-      {OverviewList.map((toDoList) => (
+      {data.map((toDoList) => (
         <OverviewItem
           key={toDoList.id}
           toDoList={toDoList}
-          handleArchive={handleArchive}
-          handleDelete={handleDelete}
+          handleArchive={handlerMap.handleArchive}
+          handleDelete={handlerMap.handleDelete}
         />
       ))}
     </div>
