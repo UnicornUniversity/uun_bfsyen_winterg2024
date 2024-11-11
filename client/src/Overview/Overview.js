@@ -1,15 +1,13 @@
 import OverviewProvider from "./OverviewProvider";
 
-import Header from "./Header.js";
 import ToDoListOverviewList from "./OverviewList.js";
 import Toolbar from "./Toolbar.js";
 
-function Overview() {
+function Overview({ setSelected }) {
   return (
     <OverviewProvider>
-      <Header />
       <Toolbar />
-      <ToDoListOverviewList />
+      <ToDoListOverviewList setSelected={setSelected} />
     </OverviewProvider>
   );
 }

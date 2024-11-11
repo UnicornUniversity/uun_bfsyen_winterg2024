@@ -3,7 +3,7 @@ import { OverviewContext } from "./OverviewProvider.js";
 
 import OverviewItem from "./OverviewItem";
 
-function OverviewList() {
+function OverviewList({ setSelected }) {
   const { data, handlerMap } = useContext(OverviewContext);
 
   return (
@@ -14,6 +14,7 @@ function OverviewList() {
           toDoList={toDoList}
           handleArchive={handlerMap.handleArchive}
           handleDelete={handlerMap.handleDelete}
+          setSelected={setSelected}
         />
       ))}
     </div>
