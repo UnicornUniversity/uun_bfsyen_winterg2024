@@ -1,7 +1,13 @@
 import { useContext, useState } from "react";
+import Button from "react-bootstrap/esm/Button";
+
+import Icon from "@mdi/react";
+import { mdiPencil } from "@mdi/js";
+
 import { DetailContext } from "./DetailProvider";
 import { UserContext } from "../Users/UserProvider";
 import UpdateNameForm from "./UpdateNameForm";
+import Stack from "react-bootstrap/esm/Stack";
 
 function Toolbar() {
   const [show, setShow] = useState(false);
@@ -9,20 +15,15 @@ function Toolbar() {
   const { loggedInUser } = useContext(UserContext);
 
   return (
-    <div style={{ border: "1px solid grey", margin: "8px", padding: "8px" }}>
-      <UpdateNameForm
-        show={show}
-        handleClose={() => setShow(false)}
-        data={data}
-        handlerMap={handlerMap}
-      />
-      {data.name}{" "}
+    <Stack className={"p-2"} direction="horizontal" gap={2}>
+      <UpdateNameForm show={show} handleClose={() => setShow(false)} data={data} handlerMap={handlerMap} />
+      <h4>{data.name}</h4>
       {loggedInUser === data.owner ? (
-        <button onClick={() => setShow(true)}>update name</button>
-      ) : (
-        ""
-      )}
-    </div>
+        <Button size="sm" onClick={() => setShow(true)}>
+          <Icon path={mdiPencil} size={1} />
+        </Button>
+      ) : null}
+    </Stack>
   );
 }
 
