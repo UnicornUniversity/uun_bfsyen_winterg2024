@@ -1,14 +1,17 @@
-import OverviewProvider from "./OverviewProvider";
+import Offcanvas from "react-bootstrap/Offcanvas";
 
 import ToDoListOverviewList from "./OverviewList.js";
 import Toolbar from "./Toolbar.js";
 
-function Overview() {
+function Overview({ show, handleClose }) {
   return (
-    <OverviewProvider>
-      <Toolbar />
-      <ToDoListOverviewList />
-    </OverviewProvider>
+    <Offcanvas show={show} onHide={handleClose} responsive="md">
+      <Offcanvas.Header closeButton />
+      <Offcanvas.Body className={"d-block"}>
+        <Toolbar />
+        <ToDoListOverviewList />
+      </Offcanvas.Body>
+    </Offcanvas>
   );
 }
 

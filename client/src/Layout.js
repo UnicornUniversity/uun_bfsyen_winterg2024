@@ -1,38 +1,37 @@
-import { useContext } from "react";
-import { UserContext } from "./Users/UserProvider.js";
-import { useTranslation } from "react-i18next";
-import { Outlet, Link } from "react-router-dom";
+import { useState } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/esm/Row";
+import Col from "react-bootstrap/esm/Col";
 
-function Header() {
-  const { userList, loggedInUser, setLoggedInUser } = useContext(UserContext);
-  const { t, i18n } = useTranslation();
+import { Outlet } from "react-router-dom";
 
-  const lngs = { en: { nativeName: "English" }, cs: { nativeName: "Čeština" } };
+import Header from "./Header";
+import Footer from "./Footer";
+import Overview from "./Overview/Overview";
+
+function Layout() {
+  const [show, setShow] = useState(true);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
-    <div>
-      <div style={{ border: "1px solid grey", margin: "8px", padding: "8px" }}>
-        <Link to="/">{t("header.appName")}</Link>{" "}
-        {Object.keys(lngs).map((lng) => (
-          <button
-            key={lng}
-            style={{ fontWeight: i18n.resolvedLanguage === lng ? "bold" : "normal" }}
-            type="submit"
-            onClick={() => i18n.changeLanguage(lng)}
-          >
-            {lngs[lng].nativeName}
-          </button>
-        ))}{" "}
-        {userList.map((user) => (
-          <button key={user.id} onClick={() => setLoggedInUser(user.id)}>
-            {user.name} {(user.id === loggedInUser).toString()}
-          </button>
-        ))}
-        <div>{t("header.date", { date: new Date() })}</div>
-      </div>
-      <Outlet />
-    </div>
+    <Container fluid className="p-0">
+      <Header handleShow={handleShow} />
+      <Row className="m-0" style={{ position: "absolute", top: "56px", bottom: "42px", left: "0px", right: "0px" }}>
+        <Col
+          style={{ width: "320px", maxWidth: "320px", height: "100%", overflow: "auto" }}
+          className={"d-none d-md-block p-2 border"}
+        >
+          <Overview show={show} handleClose={handleClose} />
+        </Col>
+        <Col className="p-0" style={{ height: "100%", overflow: "auto" }}>
+          <Outlet />
+        </Col>
+      </Row>
+      <Footer />
+    </Container>
   );
 }
 
-export default Header;
+export default Layout;

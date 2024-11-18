@@ -69,7 +69,6 @@ function DetailProvider({ children }) {
       deleteItem: ({ id }) => {
         setData((current) => {
           const itemIndex = current.itemList.findIndex((item) => item.id === id);
-          console.log(itemIndex);
           current.itemList.splice(itemIndex, 1);
           return { ...current };
         });
