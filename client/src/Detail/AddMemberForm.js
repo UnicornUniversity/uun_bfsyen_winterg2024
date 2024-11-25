@@ -22,9 +22,15 @@ function AddMemberForm({ show, data, handleClose, userList, handlerMap }) {
           <Form.Label>Member</Form.Label>
           <Form.Select type="select" name="memberId" required>
             {userList.map((user) => {
-              const isMember = data.owner === user.id || data.memberList.includes(user.id);
+              const isMember =
+                data.owner === user.id || data.memberList?.includes(user.id);
               return (
-                <option className={isMember ? "" : "text-primary"} hey={user.id} value={user.id} disabled={isMember}>
+                <option
+                  className={isMember ? "" : "text-primary"}
+                  hey={user.id}
+                  value={user.id}
+                  disabled={isMember}
+                >
                   {user.name}
                 </option>
               );

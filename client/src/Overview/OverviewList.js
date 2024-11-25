@@ -12,15 +12,19 @@ function OverviewList() {
 
   return (
     <ListGroup>
-      {data.map((toDoList) => (
-        <ListGroup.Item
-          key={toDoList.id}
-          active={selectedId === toDoList.id}
-          variant={toDoList.state === "active" ? "primary" : "dark"}
-        >
-          <OverviewItem toDoList={toDoList} />
-        </ListGroup.Item>
-      ))}
+      {!data
+        ? "není co zobrazit"
+        : data.length
+        ? data.map((toDoList) => (
+            <ListGroup.Item
+              key={toDoList.id}
+              active={selectedId === toDoList.id}
+              variant={toDoList.state === "active" ? "primary" : "dark"}
+            >
+              <OverviewItem toDoList={toDoList} />
+            </ListGroup.Item>
+          ))
+        : "list je prázdný"}
     </ListGroup>
   );
 }

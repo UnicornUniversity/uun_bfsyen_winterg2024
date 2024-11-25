@@ -26,16 +26,22 @@ function MemberList() {
       />
       <Row className="p-2">
         <Col className="p-0">
-          <Member memberId={data.owner} data={userMap[data.owner]} isOwner={true} />
+          <Member
+            memberId={data.owner}
+            data={userMap[data.owner]}
+            isOwner={true}
+          />
         </Col>
-        {data.memberList.map((memberId) => (
+        {data.memberList?.map((memberId) => (
           <Col className="p-0">
             <Member
               key={memberId}
               memberId={memberId}
               data={userMap[memberId]}
               handlerMap={handlerMap}
-              showRemoveButton={loggedInUser === data.owner || memberId === loggedInUser}
+              showRemoveButton={
+                loggedInUser === data.owner || memberId === loggedInUser
+              }
             />
           </Col>
         ))}

@@ -31,6 +31,9 @@ i18n
             counter_one: "Only one item to show",
             counter_other: "Showing {{count}} items",
           },
+          errors: {
+            failedToLoadList: "Failed to load overview!",
+          },
         },
       },
       cs: {
@@ -47,6 +50,9 @@ i18n
             counter_few: "Zobrazuji {{count}} položky",
             counter_other: "Zobrazuji {{count}} položek",
           },
+          errors: {
+            failedToLoadList: "Nepodařilo se načíst přehled úkolovníků!",
+          },
         },
       },
     },
@@ -54,11 +60,15 @@ i18n
 
 // new usage
 i18n.services.formatter.add("DATE_SHORT", (value, lng, options) => {
-  return DateTime.fromJSDate(value).setLocale(lng).toLocaleString(DateTime.DATE_SHORT);
+  return DateTime.fromJSDate(value)
+    .setLocale(lng)
+    .toLocaleString(DateTime.DATE_SHORT);
 });
 
 i18n.services.formatter.add("DATE_HUGE", (value, lng, options) => {
-  return DateTime.fromJSDate(value).setLocale(lng).toLocaleString(DateTime.DATE_HUGE);
+  return DateTime.fromJSDate(value)
+    .setLocale(lng)
+    .toLocaleString(DateTime.DATE_HUGE);
 });
 
 export default i18n;

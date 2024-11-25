@@ -1,6 +1,7 @@
-import { createContext, useMemo, useState, useContext } from "react";
+import { createContext, useMemo, useState, useContext, useEffect } from "react";
 
 import { UserContext } from "../Users/UserProvider.js";
+import FetchHelper from "./FetchHelper.js";
 
 export const OverviewContext = createContext();
 
@@ -8,36 +9,36 @@ function OverviewProvider({ children }) {
   const [showArchived, setShowArchived] = useState(false);
   const { loggedInUser } = useContext(UserContext);
 
-  const [toDoListOverviewList, setToDoListOverviewList] = useState([
-    {
-      id: "td01",
-      name: "První úkolovník",
-      state: "active",
-      owner: "u1",
-      memberList: ["u2"],
-    },
-    {
-      id: "td02",
-      name: "Druhý úkolovník",
-      state: "archived",
-      owner: "u1",
-      memberList: ["u2", "u3"],
-    },
-    {
-      id: "td03",
-      name: "Třetí úkolovník",
-      state: "active",
-      owner: "u3",
-      memberList: [],
-    },
-    {
-      id: "td04",
-      name: "čtvrtý úkolovník",
-      state: "archived",
-      owner: "u2",
-      memberList: ["u1"],
-    },
-  ]);
+  const [overviewDataLoader, setOverviewDataLoader] = useState({
+    state: "ready",
+    data: null,
+    error: null,
+  });
+  const [toDoListOverviewList, setToDoListOverviewList] = useState([]);
+
+  async function handleLoad() {
+    setOverviewDataLoader((current) => {
+      return { ...current, state: "pending" };
+    });
+    const result = await FetchHelper().toDoList.list();
+    console.log(result);
+    setOverviewDataLoader((current) => {
+      if (result.ok) {
+        return {
+          ...current,
+          state: "ready",
+          data: result.data,
+          error: null,
+        };
+      } else {
+        return { ...current, state: "error", error: result.data };
+      }
+    });
+  }
+
+  console.log(overviewDataLoader);
+
+  useEffect(() => handleLoad(), []);
 
   function handleCreate(dtoIn) {
     setToDoListOverviewList((current) => {
@@ -70,19 +71,26 @@ function OverviewProvider({ children }) {
 
   const filteredToDoListList = useMemo(() => {
     if (showArchived) {
-      return toDoListOverviewList.filter(
-        (item) => item.owner === loggedInUser || item.memberList?.includes(loggedInUser),
+      return overviewDataLoader.data?.filter(
+        (item) =>
+          item.owner === loggedInUser || item.memberList?.includes(loggedInUser)
       );
     } else {
-      return toDoListOverviewList.filter(
-        (item) => item.state === "active" && (item.owner === loggedInUser || item.memberList?.includes(loggedInUser)),
+      return overviewDataLoader.data?.filter(
+        (item) =>
+          item.state === "active" &&
+          (item.owner === loggedInUser ||
+            item.memberList?.includes(loggedInUser))
       );
     }
-  }, [showArchived, toDoListOverviewList, loggedInUser]);
+  }, [showArchived, overviewDataLoader.data, loggedInUser]);
 
   const value = {
+    state: overviewDataLoader.state,
     data: filteredToDoListList,
+    error: overviewDataLoader.error,
     handlerMap: {
+      handleLoad,
       handleCreate,
       handleArchive,
       handleDelete,
@@ -91,7 +99,11 @@ function OverviewProvider({ children }) {
     setShowArchived,
   };
 
-  return <OverviewContext.Provider value={value}>{children}</OverviewContext.Provider>;
+  return (
+    <OverviewContext.Provider value={value}>
+      {children}
+    </OverviewContext.Provider>
+  );
 }
 
 export default OverviewProvider;
