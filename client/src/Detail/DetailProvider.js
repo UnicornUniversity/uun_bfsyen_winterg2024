@@ -1,7 +1,7 @@
 import { createContext, useMemo, useState, useContext, useEffect } from "react";
 import { OverviewContext } from "../Overview/OverviewProvider.js";
 import { useSearchParams } from "react-router-dom";
-import FetchHelper from "../Overview/FetchHelper.js";
+import FetchHelper from "../FetchHelper.js";
 
 export const DetailContext = createContext();
 

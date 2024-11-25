@@ -1,9 +1,0 @@
-{
-  "toDoList/list": {
-    "ok": false,
-    "data": {
-      "code": "failedToLoadList",
-      "message": "failed to load list"
-    }
-  }
-}

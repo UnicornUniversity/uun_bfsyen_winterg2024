@@ -1,7 +1,7 @@
 import { createContext, useMemo, useState, useContext, useEffect } from "react";
 
 import { UserContext } from "../Users/UserProvider.js";
-import FetchHelper from "./FetchHelper.js";
+import FetchHelper from "../FetchHelper.js";
 
 export const OverviewContext = createContext();
 
