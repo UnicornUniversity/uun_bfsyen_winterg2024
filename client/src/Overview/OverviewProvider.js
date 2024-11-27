@@ -10,7 +10,7 @@ function OverviewProvider({ children }) {
   const { loggedInUser } = useContext(UserContext);
 
   const [overviewDataLoader, setOverviewDataLoader] = useState({
-    state: "ready",
+    state: "ready", // ready / pending / error
     data: null,
     error: null,
   });
@@ -21,7 +21,6 @@ function OverviewProvider({ children }) {
       return { ...current, state: "pending" };
     });
     const result = await FetchHelper().toDoList.list();
-    console.log(result);
     setOverviewDataLoader((current) => {
       if (result.ok) {
         return {
@@ -36,9 +35,9 @@ function OverviewProvider({ children }) {
     });
   }
 
-  console.log(overviewDataLoader);
-
-  useEffect(() => handleLoad(), []);
+  useEffect(() => {
+    handleLoad();
+  }, []);
 
   function handleCreate(dtoIn) {
     setToDoListOverviewList((current) => {

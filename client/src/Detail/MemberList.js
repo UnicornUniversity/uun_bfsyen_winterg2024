@@ -4,6 +4,7 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Icon from "@mdi/react";
 import { mdiAccountPlusOutline } from "@mdi/js";
+import Placeholder from "react-bootstrap/Placeholder";
 
 import { DetailContext } from "./DetailProvider";
 import { UserContext } from "../Users/UserProvider";
@@ -17,35 +18,43 @@ function MemberList() {
 
   return (
     <div style={{ display: "flex", gap: "4px" }}>
-      <AddMemberForm
-        show={show}
-        data={data}
-        userList={userList}
-        handlerMap={handlerMap}
-        handleClose={() => setShow(false)}
-      />
+      {data ? (
+        <AddMemberForm
+          show={show}
+          data={data}
+          userList={userList}
+          handlerMap={handlerMap}
+          handleClose={() => setShow(false)}
+        />
+      ) : null}
       <Row className="p-2">
         <Col className="p-0">
-          <Member
-            memberId={data.owner}
-            data={userMap[data.owner]}
-            isOwner={true}
-          />
-        </Col>
-        {data.memberList?.map((memberId) => (
-          <Col className="p-0">
+          {data ? (
             <Member
-              key={memberId}
-              memberId={memberId}
-              data={userMap[memberId]}
-              handlerMap={handlerMap}
-              showRemoveButton={
-                loggedInUser === data.owner || memberId === loggedInUser
-              }
+              memberId={data.owner}
+              data={userMap[data.owner]}
+              isOwner={true}
             />
-          </Col>
-        ))}
-        {data.owner === loggedInUser ? (
+          ) : (
+            <div>placeholder</div>
+          )}
+        </Col>
+        {data
+          ? data.memberList?.map((memberId) => (
+              <Col className="p-0">
+                <Member
+                  key={memberId}
+                  memberId={memberId}
+                  data={userMap[memberId]}
+                  handlerMap={handlerMap}
+                  showRemoveButton={
+                    loggedInUser === data.owner || memberId === loggedInUser
+                  }
+                />
+              </Col>
+            ))
+          : null}
+        {data?.owner === loggedInUser ? (
           <Col className="p-0 m-1 my-0 d-flex">
             <Button size="sm" onClick={() => setShow(true)} variant="success">
               <Icon path={mdiAccountPlusOutline} size={0.8} />

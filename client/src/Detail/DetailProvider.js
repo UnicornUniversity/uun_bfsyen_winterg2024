@@ -6,7 +6,7 @@ import FetchHelper from "../FetchHelper.js";
 export const DetailContext = createContext();
 
 function DetailProvider({ children }) {
-  const { data: overviewData, state, error } = useContext(OverviewContext);
+  // const { data, state, error } = useContext(OverviewContext);
   const [searchParams] = useSearchParams();
   const selectedId = searchParams.get("id");
 
@@ -17,28 +17,54 @@ function DetailProvider({ children }) {
   });
 
   async function handleLoad() {
-    await FetchHelper().toDoList.get({ id: selectedId });
+    setDetailDataLoader((current) => {
+      return {
+        ...current,
+        state: "pending",
+        data: selectedId !== current.data?.id ? null : current.data,
+      };
+    });
+    const result = await FetchHelper().toDoList.get({ id: selectedId });
+    setDetailDataLoader((current) => {
+      if (result.ok) {
+        return {
+          ...current,
+          state: "ready",
+          data: result.data,
+          error: null,
+        };
+      } else {
+        return { ...current, state: "error", error: result.data };
+      }
+    });
   }
 
-  useEffect(() => handleLoad(), []);
-
-  const data = overviewData?.find((item) => item.id === selectedId);
-
-  const setData = () => {};
+  useEffect(() => {
+    if (selectedId) handleLoad();
+  }, [selectedId]);
 
   const [showResolved, setShowResolved] = useState(false);
 
   const filteredData = useMemo(() => {
-    const result = { ...data };
-    if (!showResolved) {
-      result.itemList = result?.itemList?.filter((item) => !item.resolved);
+    if (detailDataLoader.data) {
+      const result = { ...detailDataLoader.data };
+      if (!showResolved) {
+        result.itemList = result?.itemList?.filter((item) => !item.resolved);
+      }
+      return result;
+    } else {
+      return undefined;
     }
-    return result;
-  }, [data, showResolved]);
+  }, [detailDataLoader.data, showResolved]);
+
+  const setData = () => {};
 
   const value = {
+    state: detailDataLoader.state,
+    error: detailDataLoader.error,
     data: filteredData,
     handlerMap: {
+      handleLoad,
       updateName: ({ name }) => {
         setData((current) => {
           current.name = name;

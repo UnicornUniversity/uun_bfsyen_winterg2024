@@ -32,6 +32,8 @@ i18n
             counter_other: "Showing {{count}} items",
           },
           errors: {
+            noCode: "Something's gone wrong.",
+            toDoListNotFound: "ToDoList does not exist.",
             failedToLoadList: "Failed to load overview!",
           },
         },
@@ -51,6 +53,8 @@ i18n
             counter_other: "Zobrazuji {{count}} položek",
           },
           errors: {
+            noCode: "Něco se nepovedlo.",
+            toDoListNotFound: "ToDoList neexistuje.",
             failedToLoadList: "Nepodařilo se načíst přehled úkolovníků!",
           },
         },

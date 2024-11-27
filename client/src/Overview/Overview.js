@@ -17,7 +17,9 @@ function Overview({ show, handleClose }) {
       <Offcanvas.Body className={"d-block"}>
         <Toolbar />
         {state === "error" ? (
-          <Alert variant={"danger"}>{t(`errors.${error.code}`)}</Alert>
+          <Alert variant={"danger"}>
+            {t(`errors.${error.code || "noCode"}`)}
+          </Alert>
         ) : null}
         <ToDoListOverviewList />
       </Offcanvas.Body>

@@ -38,9 +38,13 @@ function ItemList() {
         </Button>
       </Stack>
       <div className="p-2">
-        {data.itemList?.map((item) => (
-          <Item key={item.id} data={item} handlerMap={handlerMap} />
-        ))}
+        {data ? (
+          data.itemList?.map((item) => (
+            <Item key={item.id} data={item} handlerMap={handlerMap} />
+          ))
+        ) : (
+          <div>placeholder</div>
+        )}
       </div>
     </div>
   );
