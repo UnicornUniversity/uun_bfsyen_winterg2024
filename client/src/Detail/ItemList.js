@@ -18,6 +18,8 @@ function ItemList() {
     useContext(DetailContext);
   // const { t } = useTranslation();
 
+  console.log(data?.itemList);
+
   return (
     <div className="p-2">
       <Stack direction="horizontal" gap="2">

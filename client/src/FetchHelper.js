@@ -1,4 +1,4 @@
-async function Call(baseUri, useCase, dtoIn) {
+async function Call(baseUri, useCase, dtoIn, method) {
   const useMock = process.env.REACT_APP_USE_MOCK;
 
   if (useMock === "true") {
@@ -10,9 +10,18 @@ async function Call(baseUri, useCase, dtoIn) {
     return { ok: response.ok, data };
   } else {
     // return fetch
-    const response = await fetch(
-      `${baseUri}/${useCase}${dtoIn ? `?id=${dtoIn.id}` : ""}`
-    );
+    let response;
+    if (!method || method === "get") {
+      response = await fetch(
+        `${baseUri}/${useCase}${dtoIn ? `?id=${dtoIn.id}` : ""}`
+      );
+    } else {
+      response = await fetch(`${baseUri}/${useCase}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dtoIn),
+      });
+    }
     const data = await response.json();
     return { ok: response.ok, data };
   }
@@ -24,10 +33,16 @@ function FetchHelper() {
   return {
     toDoList: {
       get: async (dtoIn) => {
-        return await Call(baseUri, "toDoList/get", dtoIn);
+        return await Call(baseUri, "toDoList/get", dtoIn, "get");
+      },
+      create: async (dtoIn) => {
+        return await Call(baseUri, "toDoList/create", dtoIn, "post");
+      },
+      update: async (dtoIn) => {
+        return await Call(baseUri, "toDoList/update", dtoIn, "post");
       },
       list: async () => {
-        return await Call(baseUri, "toDoList/list");
+        return await Call(baseUri, "toDoList/list", null, "get");
       },
     },
   };

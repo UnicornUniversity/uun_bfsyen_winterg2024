@@ -1,12 +1,12 @@
-import { createContext, useMemo, useState, useContext, useEffect } from "react";
-import { OverviewContext } from "../Overview/OverviewProvider.js";
+import { createContext, useMemo, useState, useEffect, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import FetchHelper from "../FetchHelper.js";
+import { OverviewContext } from "../Overview/OverviewProvider.js";
 
 export const DetailContext = createContext();
 
 function DetailProvider({ children }) {
-  // const { data, state, error } = useContext(OverviewContext);
+  const { handlerMap } = useContext(OverviewContext);
   const [searchParams] = useSearchParams();
   const selectedId = searchParams.get("id");
 
@@ -39,6 +39,33 @@ function DetailProvider({ children }) {
     });
   }
 
+  async function handleUpdate(dtoIn, itemId) {
+    setDetailDataLoader((current) => {
+      return {
+        ...current,
+        state: "pending",
+        itemId: itemId,
+      };
+    });
+
+    const result = await FetchHelper().toDoList.update(dtoIn);
+
+    setDetailDataLoader((current) => {
+      if (result.ok) {
+        handlerMap.handleLoad();
+        return {
+          ...current,
+          state: "ready",
+          itemId: null,
+          data: result.data,
+          error: null,
+        };
+      } else {
+        return { ...current, state: "error", error: result.data };
+      }
+    });
+  }
+
   useEffect(() => {
     if (selectedId) handleLoad();
   }, [selectedId]);
@@ -46,6 +73,7 @@ function DetailProvider({ children }) {
   const [showResolved, setShowResolved] = useState(false);
 
   const filteredData = useMemo(() => {
+    console.log(detailDataLoader.data);
     if (detailDataLoader.data) {
       const result = { ...detailDataLoader.data };
       if (!showResolved) {
@@ -62,57 +90,63 @@ function DetailProvider({ children }) {
   const value = {
     state: detailDataLoader.state,
     error: detailDataLoader.error,
+    itemId: detailDataLoader.itemId,
     data: filteredData,
     handlerMap: {
       handleLoad,
-      updateName: ({ name }) => {
-        setData((current) => {
-          current.name = name;
-          return { ...current };
-        });
-      },
+      handleUpdate,
       addItem: () => {
-        setData((current) => {
-          current.itemList.push({
+        setDetailDataLoader((current) => {
+          current.data.itemList.push({
             id: Math.random(),
             name: "",
             resolved: false,
           });
-          return { ...current };
+          return JSON.parse(JSON.stringify(current));
         });
       },
       updateItemName: ({ id, name }) => {
-        setData((current) => {
-          const itemIndex = current.itemList.findIndex(
-            (item) => item.id === id
-          );
-          current.itemList[itemIndex] = {
-            ...current.itemList[itemIndex],
-            name,
-          };
-          return { ...current };
-        });
+        const itemIndex = detailDataLoader.data.itemList.findIndex(
+          (item) => item.id === id
+        );
+        detailDataLoader.data.itemList[itemIndex] = {
+          ...detailDataLoader.data.itemList[itemIndex],
+          name,
+        };
+        handleUpdate(
+          {
+            id: detailDataLoader.data.id,
+            itemList: detailDataLoader.data.itemList,
+          },
+          id
+        );
       },
       toggleResolveItem: ({ id }) => {
-        setData((current) => {
-          const itemIndex = current.itemList.findIndex(
-            (item) => item.id === id
-          );
-          current.itemList[itemIndex] = {
-            ...current.itemList[itemIndex],
-            resolved: !current.itemList[itemIndex].resolved,
-          };
-          return { ...current };
-        });
+        const itemIndex = detailDataLoader.data.itemList.findIndex(
+          (item) => item.id === id
+        );
+        detailDataLoader.data.itemList[itemIndex].resolved =
+          !detailDataLoader.data.itemList[itemIndex].resolved;
+        handleUpdate(
+          {
+            id: detailDataLoader.data.id,
+            itemList: detailDataLoader.data.itemList,
+          },
+          id
+        );
       },
       deleteItem: ({ id }) => {
-        setData((current) => {
-          const itemIndex = current.itemList.findIndex(
-            (item) => item.id === id
-          );
-          current.itemList.splice(itemIndex, 1);
-          return { ...current };
-        });
+        const itemIndex = detailDataLoader.data.itemList.findIndex(
+          (item) => item.id === id
+        );
+        detailDataLoader.data.itemList.splice(itemIndex, 1);
+        handleUpdate(
+          {
+            id: detailDataLoader.data.id,
+            itemList: detailDataLoader.data.itemList,
+          },
+          id
+        );
       },
       addMember: ({ memberId }) => {
         setData((current) => {

@@ -36,7 +36,7 @@ function MemberList() {
               isOwner={true}
             />
           ) : (
-            <div>placeholder</div>
+            <Placeholder.Button variant="primary" xs={6} animation={"glow"} />
           )}
         </Col>
         {data

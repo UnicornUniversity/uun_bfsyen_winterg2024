@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -7,7 +7,17 @@ import Form from "react-bootstrap/Form";
 import { OverviewContext } from "./OverviewProvider.js";
 
 function CreateForm({ onClose }) {
-  const { handlerMap } = useContext(OverviewContext);
+  const { state, handlerMap } = useContext(OverviewContext);
+
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+    } else {
+      if (state === "ready") onClose();
+    }
+  }, [state]);
 
   return (
     <Modal show={true} onHide={onClose}>
@@ -18,7 +28,6 @@ function CreateForm({ onClose }) {
           const formData = new FormData(e.target);
           const values = Object.fromEntries(formData);
           handlerMap.handleCreate({ name: values.name });
-          onClose();
         }}
       >
         <Modal.Header closeButton>
@@ -26,13 +35,26 @@ function CreateForm({ onClose }) {
         </Modal.Header>
         <Modal.Body>
           <Form.Label>Name</Form.Label>
-          <Form.Control type="text" name="name" required />
+          <Form.Control
+            type="text"
+            name="name"
+            required
+            disabled={state === "pending"}
+          />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={onClose}>
+          <Button
+            variant="secondary"
+            onClick={onClose}
+            disabled={state === "pending"}
+          >
             Close
           </Button>
-          <Button variant="primary" type="submit">
+          <Button
+            variant="primary"
+            type="submit"
+            disabled={state === "pending"}
+          >
             Save Changes
           </Button>
         </Modal.Footer>

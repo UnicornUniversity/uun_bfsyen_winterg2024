@@ -39,17 +39,15 @@ function OverviewProvider({ children }) {
     handleLoad();
   }, []);
 
-  function handleCreate(dtoIn) {
-    setToDoListOverviewList((current) => {
-      current.push({
-        id: Math.random(),
-        name: dtoIn.name,
-        state: "active",
-        owner: loggedInUser,
-        memberList: [],
-      });
-      return current.slice();
+  async function handleCreate(dtoIn) {
+    setOverviewDataLoader((current) => {
+      return { ...current, state: "pending" };
     });
+    await FetchHelper().toDoList.create({
+      name: dtoIn.name,
+      owner: loggedInUser,
+    });
+    handleLoad();
   }
 
   function handleArchive(dtoIn) {
