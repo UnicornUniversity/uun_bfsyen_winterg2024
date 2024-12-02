@@ -41,6 +41,9 @@ function FetchHelper() {
       update: async (dtoIn) => {
         return await Call(baseUri, "toDoList/update", dtoIn, "post");
       },
+      delete: async (dtoIn) => {
+        return await Call(baseUri, "toDoList/delete", dtoIn, "post");
+      },
       list: async () => {
         return await Call(baseUri, "toDoList/list", null, "get");
       },

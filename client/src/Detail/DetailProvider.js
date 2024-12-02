@@ -1,5 +1,9 @@
 import { createContext, useMemo, useState, useEffect, useContext } from "react";
-import { useSearchParams } from "react-router-dom";
+import {
+  useSearchParams,
+  useNavigate,
+  createSearchParams,
+} from "react-router-dom";
 import FetchHelper from "../FetchHelper.js";
 import { OverviewContext } from "../Overview/OverviewProvider.js";
 
@@ -9,6 +13,7 @@ function DetailProvider({ children }) {
   const { handlerMap } = useContext(OverviewContext);
   const [searchParams] = useSearchParams();
   const selectedId = searchParams.get("id");
+  const navigate = useNavigate();
 
   const [detailDataLoader, setDetailDataLoader] = useState({
     state: "ready",
@@ -66,6 +71,35 @@ function DetailProvider({ children }) {
     });
   }
 
+  async function handleDelete(dtoIn, itemId) {
+    setDetailDataLoader((current) => {
+      return {
+        ...current,
+        state: "pending",
+      };
+    });
+
+    const result = await FetchHelper().toDoList.delete(dtoIn);
+
+    setDetailDataLoader((current) => {
+      if (result.ok) {
+        handlerMap.handleLoad();
+        return {
+          ...current,
+          state: "ready",
+          data: result.data,
+          error: null,
+        };
+      } else {
+        return { ...current, state: "error", error: result.data };
+      }
+    });
+
+    navigate({
+      search: createSearchParams({}).toString(),
+    });
+  }
+
   useEffect(() => {
     if (selectedId) handleLoad();
   }, [selectedId]);
@@ -73,7 +107,6 @@ function DetailProvider({ children }) {
   const [showResolved, setShowResolved] = useState(false);
 
   const filteredData = useMemo(() => {
-    console.log(detailDataLoader.data);
     if (detailDataLoader.data) {
       const result = { ...detailDataLoader.data };
       if (!showResolved) {
@@ -85,8 +118,6 @@ function DetailProvider({ children }) {
     }
   }, [detailDataLoader.data, showResolved]);
 
-  const setData = () => {};
-
   const value = {
     state: detailDataLoader.state,
     error: detailDataLoader.error,
@@ -95,6 +126,7 @@ function DetailProvider({ children }) {
     handlerMap: {
       handleLoad,
       handleUpdate,
+      handleDelete,
       addItem: () => {
         setDetailDataLoader((current) => {
           current.data.itemList.push({
@@ -149,19 +181,22 @@ function DetailProvider({ children }) {
         );
       },
       addMember: ({ memberId }) => {
-        setData((current) => {
-          if (!current.memberList.includes(memberId))
-            current.memberList.push(memberId);
-          return { ...current };
+        if (!detailDataLoader.data.memberList.includes(memberId))
+          detailDataLoader.data.memberList.push(memberId);
+        handleUpdate({
+          id: detailDataLoader.data.id,
+          memberList: detailDataLoader.data.memberList,
         });
       },
       removeMember: ({ memberId }) => {
-        setData((current) => {
-          const memberIndex = current.memberList.findIndex(
-            (item) => item === memberId
-          );
-          if (memberIndex > -1) current.memberList.splice(memberIndex, 1);
-          return { ...current };
+        const memberIndex = detailDataLoader.data.memberList.findIndex(
+          (item) => item === memberId
+        );
+        if (memberIndex > -1)
+          detailDataLoader.data.memberList.splice(memberIndex, 1);
+        handleUpdate({
+          id: detailDataLoader.data.id,
+          memberList: detailDataLoader.data.memberList,
         });
       },
     },

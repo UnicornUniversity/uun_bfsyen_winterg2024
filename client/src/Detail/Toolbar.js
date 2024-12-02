@@ -4,7 +4,13 @@ import Spinner from "react-bootstrap/Spinner";
 import Placeholder from "react-bootstrap/Placeholder";
 
 import Icon from "@mdi/react";
-import { mdiPencil, mdiReload, mdiAlert } from "@mdi/js";
+import {
+  mdiPencil,
+  mdiReload,
+  mdiAlert,
+  mdiCloseCircleOutline,
+  mdiDeleteOutline,
+} from "@mdi/js";
 
 import { DetailContext } from "./DetailProvider";
 import { UserContext } from "../Users/UserProvider";
@@ -33,13 +39,34 @@ function Toolbar() {
       ) : null}
       <h4>{data ? data.name : null}</h4>
       {loggedInUser === data?.owner ? (
-        <Button size="sm" onClick={() => setShow(true)}>
-          <Icon path={mdiPencil} size={1} />
-        </Button>
+        <>
+          <Button size="sm" className="p-1" onClick={() => setShow(true)}>
+            <Icon path={mdiPencil} size={1} />
+          </Button>
+          <Button
+            variant="warning"
+            className="p-1"
+            size="sm"
+            onClick={() =>
+              handlerMap.handleUpdate({ id: data.id, state: "archived" })
+            }
+          >
+            <Icon path={mdiCloseCircleOutline} size={1} />
+          </Button>
+          <Button
+            variant="danger"
+            className="p-1"
+            size="sm"
+            onClick={() => handlerMap.handleDelete({ id: data.id })}
+          >
+            <Icon path={mdiDeleteOutline} size={1} />
+          </Button>
+        </>
       ) : null}
       <Button
         onClick={handlerMap.handleLoad}
         size="sm"
+        className="p-1"
         variant={state === "error" ? "danger" : "primary"}
       >
         {state === "pending" ? (

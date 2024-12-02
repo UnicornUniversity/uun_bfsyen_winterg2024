@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import Toolbar from "./Toolbar";
 import MemberList from "./MemberList";
 import ItemList from "./ItemList";
+import ToDoListChart from "./ToDoListChart";
 import { DetailContext } from "./DetailProvider";
 
 function DetailContent() {
@@ -23,6 +24,7 @@ function DetailContent() {
       <Toolbar />
       <MemberList />
       <ItemList />
+      <ToDoListChart />
     </>
   );
 }
