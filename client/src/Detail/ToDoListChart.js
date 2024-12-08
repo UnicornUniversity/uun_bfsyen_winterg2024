@@ -1,10 +1,16 @@
 import { useContext } from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+} from "recharts";
 import { DetailContext } from "./DetailProvider";
 
 function ToDoListChart() {
   const { data } = useContext(DetailContext);
-  console.log(data);
 
   const toDoListResolved = data?.itemList.filter((item) => item.resolved) || [];
   const toDoListNotResolved =
@@ -37,6 +43,8 @@ function ToDoListChart() {
               />
             ))}
           </Pie>
+          <Legend />
+          <Tooltip />
         </PieChart>
       </ResponsiveContainer>
     </div>

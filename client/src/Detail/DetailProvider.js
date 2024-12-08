@@ -100,9 +100,11 @@ function DetailProvider({ children }) {
     });
   }
 
+  /* eslint-disable */
   useEffect(() => {
     if (selectedId) handleLoad();
   }, [selectedId]);
+  /* eslint-enable */
 
   const [showResolved, setShowResolved] = useState(false);
 
